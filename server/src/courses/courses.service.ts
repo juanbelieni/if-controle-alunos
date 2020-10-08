@@ -1,0 +1,28 @@
+import { formations, Course } from '@entities/course.entity';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
+import { CreateCourseDto } from './dto/create-course.dto';
+
+@Injectable()
+export class CoursesService {
+  constructor(
+    @InjectRepository(Course)
+    private readonly coursesRepository: Repository<Course>,
+  ) {}
+
+  async findAll() {
+    return this.coursesRepository.find({
+      cache: 5000,
+    });
+  }
+
+  async create(createCourseDto: CreateCourseDto) {
+    await this.coursesRepository.save(createCourseDto);
+  }
+
+  getFormations() {
+    return formations;
+  }
+}
