@@ -14,12 +14,24 @@ export class CoursesService {
 
   async findAll() {
     return this.coursesRepository.find({
-      cache: 5000,
+      cache: 2000,
+    });
+  }
+
+  async findOne(id: number) {
+    return this.coursesRepository.findOne({
+      where: { id },
+      relations: ['courseClasses'],
+      cache: 2000,
     });
   }
 
   async create(createCourseDto: CreateCourseDto) {
     await this.coursesRepository.save(createCourseDto);
+  }
+
+  async delete(id: number) {
+    await this.coursesRepository.delete(id);
   }
 
   getFormations() {

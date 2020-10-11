@@ -1,0 +1,6 @@
+{
+  "extends": "universe/web",
+  "rules": {
+    "@typescript-eslint/no-redeclare": 0
+  }
+}

@@ -4,7 +4,10 @@ import {
   Column,
   CreateDateColumn,
   AfterLoad,
+  OneToMany,
 } from 'typeorm';
+
+import { CourseClass } from './course-class.entity';
 
 export const formations = ['Integrado', 'Subsequente', 'Superior'] as const;
 export type Formation = typeof formations[number];
@@ -19,6 +22,9 @@ export class Course {
 
   @Column({ type: 'enum', enum: formations })
   formation: Formation;
+
+  @OneToMany(() => CourseClass, (courseClass) => courseClass.course)
+  courseClasses: CourseClass[];
 
   @CreateDateColumn()
   createdAt: Date;

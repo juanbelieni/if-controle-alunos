@@ -1,4 +1,11 @@
-import { IsString, Matches, IsISO8601, IsIn } from 'class-validator';
+import {
+  IsString,
+  Matches,
+  IsISO8601,
+  IsIn,
+  IsInt,
+  Min,
+} from 'class-validator';
 
 import {
   genders,
@@ -40,7 +47,13 @@ export class CreateStudentDto {
   city: City;
 
   @IsIn([...schoolTypes], {
-    message: `A cidade informada não é: ${cities.join(', ')}.`,
+    message: `O tipo da escola de origem informada não é: ${schoolTypes.join(
+      ', ',
+    )}.`,
   })
   originSchoolType: SchoolType;
+
+  @IsInt({ message: 'Selecione uma turma válida.' })
+  @Min(1, { message: 'Selecione uma turma válida.' })
+  courseClassId: number;
 }

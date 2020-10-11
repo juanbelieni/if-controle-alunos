@@ -33,8 +33,10 @@ export class CourseClass {
 
   @AfterLoad()
   afterLoad() {
-    this.courseClass = `${this.course.course} - ${this.entryYear}${
-      this.entrySemester !== 0 ? `/${this.entrySemester}` : ''
-    }`;
+    if (this.course) {
+      this.courseClass = `${this.course.course} - ${this.entryYear}${
+        this.entrySemester !== 0 ? `/${this.entrySemester}` : ''
+      }`;
+    }
   }
 }

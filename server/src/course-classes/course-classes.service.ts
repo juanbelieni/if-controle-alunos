@@ -18,7 +18,7 @@ export class CourseClassesService {
   async findAll() {
     return this.courseClassesRepository.find({
       relations: ['course'],
-      cache: 5000,
+      cache: 2000,
     });
   }
 

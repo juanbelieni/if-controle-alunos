@@ -3,7 +3,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+
+import { CourseClass } from './course-class.entity';
 
 export const genders = ['Masculino', 'Feminino', 'Não especificado'] as const;
 export type Gender = typeof genders[number];
@@ -49,4 +52,7 @@ export class Student {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => CourseClass, { nullable: false })
+  courseClass: CourseClass;
 }
