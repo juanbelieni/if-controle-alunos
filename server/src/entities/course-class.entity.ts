@@ -29,6 +29,9 @@ export class CourseClass {
   @ManyToOne(() => Course, { nullable: false })
   course: Course;
 
+  @Column({ nullable: false })
+  courseId: number;
+
   courseClass: string;
 
   @AfterLoad()

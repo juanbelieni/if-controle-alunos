@@ -23,9 +23,6 @@ export class Course {
   @Column({ type: 'enum', enum: formations })
   formation: Formation;
 
-  @OneToMany(() => CourseClass, (courseClass) => courseClass.course)
-  courseClasses: CourseClass[];
-
   @CreateDateColumn()
   createdAt: Date;
 

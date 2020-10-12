@@ -8,8 +8,13 @@ import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    menuButton: {
-      marginRight: theme.spacing(2),
+    toolbar: {
+      maxWidth: theme.breakpoints.width('lg'),
+      width: '100%',
+      marginRight: 0,
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(2),
+      alignSelf: 'center',
     },
     title: {
       flexGrow: 1,
@@ -31,7 +36,7 @@ const Navbar: React.FC = () => {
 
   return (
     <AppBar position="static">
-      <Toolbar variant="dense">
+      <Toolbar className={styles.toolbar} variant="dense">
         <Typography variant="h6" className={styles.title}>
           Controle de Alunos
         </Typography>

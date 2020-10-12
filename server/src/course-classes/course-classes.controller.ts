@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 
 import { CourseClassesService } from './course-classes.service';
 import { CreateCourseClassDto } from './dto/create-course-class.dto';
@@ -8,8 +15,11 @@ export class CourseClassesController {
   constructor(private readonly courseClassesService: CourseClassesService) {}
 
   @Get()
-  async index() {
-    return await this.courseClassesService.findAll();
+  async index(@Query('courseId') courseId: number) {
+    if (isNaN(courseId)) {
+      throw new BadRequestException('Selecione um curso válido.');
+    }
+    return this.courseClassesService.findByCourseId(courseId);
   }
 
   @Post()

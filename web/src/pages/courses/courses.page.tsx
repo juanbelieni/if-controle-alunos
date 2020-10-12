@@ -1,10 +1,10 @@
-import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
-import Navbar from '../../components/navbar/navbar.component';
+import PageContainer from '../../components/page-container/page-container.component';
 import Table from '../../components/table/table.component';
 import useFetch from '../../hooks/use-fetch.hook';
 import api from '../../services/api.service';
@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) =>
 
 const CoursesPage: React.FC = () => {
   const styles = useStyles();
+  const history = useHistory();
 
   const [courses, isCoursesValidating, revalidateCourses] = useFetch<Course[]>(
     'courses',
@@ -49,44 +50,50 @@ const CoursesPage: React.FC = () => {
     await revalidateCourses();
   }
 
+  function navigateToCourse(data: Course) {
+    history.push(`/cursos/${data.id}`);
+  }
+
   return (
-    <>
-      <Navbar />
-      <main>
-        <Container className={styles.table}>
-          <Table<Course>
-            title="Cursos"
-            onRefrechClick={revalidateCourses}
-            data={courses || []}
-            isLoading={isCoursesValidating || isFormationsValidating}
-            editable={{
-              onRowAdd: createCourse,
-              onRowDelete: deleteCourse,
-            }}
-            columns={[
-              { title: 'Nome', field: 'name' },
-              {
-                title: 'Formação',
-                field: 'formation',
-                editComponent: ({ onChange, value }) => (
-                  <Select
-                    value={value || ''}
-                    onChange={(e) => onChange(e.target.value)}
-                    className={styles.select}
-                  >
-                    {formations?.map((formation) => (
-                      <MenuItem value={formation} key={formation}>
-                        {formation}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                ),
-              },
-            ]}
-          />
-        </Container>
-      </main>
-    </>
+    <PageContainer>
+      <Table<Course>
+        title="Cursos"
+        onRefrechClick={revalidateCourses}
+        data={courses || []}
+        isLoading={isCoursesValidating || isFormationsValidating}
+        editable={{
+          onRowAdd: createCourse,
+          onRowDelete: deleteCourse,
+        }}
+        actions={[
+          {
+            icon: 'launch',
+            tooltip: 'Mostrar',
+            onClick: (_, course) => navigateToCourse(course as Course),
+          },
+        ]}
+        columns={[
+          { title: 'Nome', field: 'name' },
+          {
+            title: 'Formação',
+            field: 'formation',
+            editComponent: ({ onChange, value }) => (
+              <Select
+                value={value || ''}
+                onChange={(e) => onChange(e.target.value)}
+                className={styles.select}
+              >
+                {formations?.map((formation) => (
+                  <MenuItem value={formation} key={formation}>
+                    {formation}
+                  </MenuItem>
+                ))}
+              </Select>
+            ),
+          },
+        ]}
+      />
+    </PageContainer>
   );
 };
 

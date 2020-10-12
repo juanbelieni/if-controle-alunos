@@ -21,7 +21,6 @@ export class CoursesService {
   async findOne(id: number) {
     return this.coursesRepository.findOne({
       where: { id },
-      relations: ['courseClasses'],
       cache: 2000,
     });
   }
