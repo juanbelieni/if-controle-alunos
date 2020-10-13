@@ -38,4 +38,8 @@ export class CourseClassesService {
       course,
     });
   }
+
+  async delete(id: number) {
+    await this.courseClassesRepository.delete(id);
+  }
 }

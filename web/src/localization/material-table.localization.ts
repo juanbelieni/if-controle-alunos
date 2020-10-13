@@ -24,7 +24,7 @@ const MTLocalization: Localization = {
     editRow: {
       saveTooltip: 'Confirmar',
       cancelTooltip: 'Cancelar',
-      deleteText: 'Você deseja realmente apagar?',
+      deleteText: 'Deseja exlcuir essa linha?',
     },
     addTooltip: 'Adicionar',
     deleteTooltip: 'Excluir',

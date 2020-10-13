@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) =>
       paddingTop: theme.spacing(3),
     },
     select: {
-      fontSize: theme.typography.body2.fontSize,
+      fontSize: '13px',
       width: '100%',
     },
   }),

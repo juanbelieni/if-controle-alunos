@@ -10,12 +10,6 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true,
       dismissDefaultMessages: true,
-      // exceptionFactory: (errors) => {
-      //  const constraints = errors[0].constraints;
-      //  const error = constraints[Object.keys(constraints)[0]];
-
-      //  return new BadRequestException(error);
-      // },
     }),
   );
 

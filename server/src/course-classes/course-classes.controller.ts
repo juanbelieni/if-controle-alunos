@@ -5,6 +5,8 @@ import {
   Body,
   Query,
   BadRequestException,
+  Delete,
+  Param,
 } from '@nestjs/common';
 
 import { CourseClassesService } from './course-classes.service';
@@ -25,5 +27,10 @@ export class CourseClassesController {
   @Post()
   createCourseClass(@Body() createCourseClassDto: CreateCourseClassDto) {
     return this.courseClassesService.create(createCourseClassDto);
+  }
+
+  @Delete(':id')
+  deleteCourseClass(@Param('id') id: number) {
+    return this.courseClassesService.delete(id);
   }
 }
