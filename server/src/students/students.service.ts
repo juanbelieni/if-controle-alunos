@@ -8,9 +8,10 @@ import {
 } from '@entities/student.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 
 import { CreateStudentDto } from './dto/create-student.dto';
+import { CreateStudentsDto } from './dto/create-students.dto';
 
 @Injectable()
 export class StudentsService {
@@ -34,7 +35,7 @@ export class StudentsService {
     });
   }
 
-  async create(createStudentDto: CreateStudentDto) {
+  async createOne(createStudentDto: CreateStudentDto) {
     const { courseClassId, ...studentData } = createStudentDto;
 
     const existintStudent = await this.studentsRepository.findOne({
@@ -59,6 +60,32 @@ export class StudentsService {
       ...studentData,
       courseClass,
     });
+  }
+
+  async createMany(createStudentsDto: CreateStudentsDto) {
+    const { courseClassId, students } = createStudentsDto;
+
+    const courseClass = await this.courseClassRepository.findOne(courseClassId);
+
+    if (!courseClass) {
+      throw new BadRequestException(
+        'A turma selecionada não está presente no sistema.',
+      );
+    }
+
+    const existintStudent = await this.studentsRepository.findOne({
+      where: {
+        matriculation: In(students.map((student) => student.matriculation)),
+      },
+    });
+
+    if (existintStudent) {
+      throw new BadRequestException('Matrícula(s) ja cadastrada no sistema.');
+    }
+
+    await this.studentsRepository.save(
+      students.map((student) => ({ ...student, courseClass })),
+    );
   }
 
   getRaces() {

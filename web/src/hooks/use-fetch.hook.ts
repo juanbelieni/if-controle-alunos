@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import api from '../services/api.service';
 
 export default function useFetch<T>(
-  path: string,
+  path: string | null,
   serializeData: (responseData: any) => T = (responseData) => responseData,
 ): [T | undefined, boolean, () => Promise<boolean>] {
   const { data, isValidating, revalidate } = useSWR(

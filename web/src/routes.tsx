@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import CoursePage from './pages/course/course.page';
 import CoursesPage from './pages/courses/courses.page';
+import CreateStudentsPage from './pages/create-students/create-students.page';
 import StudentsPage from './pages/students/students.page';
 
 const Routes: React.FC = () => {
@@ -17,6 +18,9 @@ const Routes: React.FC = () => {
         </Route>
         <Route path="/alunos" exact>
           <StudentsPage />
+        </Route>
+        <Route path="/alunos/adicionar" exact>
+          <CreateStudentsPage />
         </Route>
       </Switch>
     </Router>

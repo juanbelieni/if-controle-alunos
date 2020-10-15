@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import PageContainer from '../../components/page-container/page-container.component';
 import Table from '../../components/table/table.component';
@@ -18,9 +19,14 @@ interface Student {
 }
 
 const StudentsPage: React.FC = () => {
+  const history = useHistory();
   const [students, isStudentsValidating, revalidateStudents] = useFetch<
     Student[]
   >('students');
+
+  function navigateToCreateStudents() {
+    history.push('alunos/adicionar');
+  }
 
   return (
     <PageContainer>
@@ -29,6 +35,14 @@ const StudentsPage: React.FC = () => {
         onRefrechClick={revalidateStudents}
         data={students || []}
         isLoading={isStudentsValidating}
+        actions={[
+          {
+            icon: 'group_add',
+            tooltip: 'Adicionar alunos (CSV)',
+            isFreeAction: true,
+            onClick: navigateToCreateStudents,
+          },
+        ]}
         columns={[
           { title: 'Nome', field: 'name' },
           { title: 'Matrícula', field: 'matriculation' },

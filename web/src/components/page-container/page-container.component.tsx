@@ -4,24 +4,27 @@ import React from 'react';
 
 import Navbar from '../navbar/navbar.component';
 
+type Width = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 interface Props {
+  maxWidth?: Width;
   isLoading?: boolean;
 }
 
 const useStyles = makeStyles((theme) =>
-  createStyles({
+  createStyles<'main', { maxWidth?: Width }>({
     main: {
       padding: theme.spacing(2),
       paddingTop: theme.spacing(3),
-      maxWidth: theme.breakpoints.width('lg'),
+      maxWidth: (props) => theme.breakpoints.width(props.maxWidth || 'lg'),
       width: '100%',
       margin: '0 auto',
     },
   }),
 );
 
-const PageContainer: React.FC<Props> = ({ children, isLoading }) => {
-  const styles = useStyles();
+const PageContainer: React.FC<Props> = ({ children, isLoading, maxWidth }) => {
+  const styles = useStyles({ maxWidth });
 
   return (
     <>

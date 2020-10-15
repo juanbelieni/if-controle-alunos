@@ -41,17 +41,17 @@ const CoursesPage: React.FC = () => {
   );
 
   async function createCourse(data: Course) {
-    await api.post('/courses', data);
+    await api.post('courses', data);
     await revalidateCourses();
   }
 
   async function deleteCourse(data: Course) {
-    await api.delete(`/courses/${data.id}`);
+    await api.delete(`courses/${data.id}`);
     await revalidateCourses();
   }
 
   function navigateToCourse(data: Course) {
-    history.push(`/cursos/${data.id}`);
+    history.push(`cursos/${data.id}`);
   }
 
   return (
