@@ -44,6 +44,7 @@ const CreateStudentsPage: React.FC = () => {
   const [selectedCourseClass, setSelectedCourseClass] = useState<number | ''>(
     '',
   );
+  const [file, setFile] = useState<File>();
 
   const [courses, isCoursesValidating] = useFetch<Course[]>('courses');
   const [courseClasses, isCourseClassesValidating] = useFetch<CourseClass[]>(
@@ -63,7 +64,6 @@ const CreateStudentsPage: React.FC = () => {
       isLoading={isCoursesValidating || isCourseClassesValidating}
       maxWidth="md"
     >
-      {/* <Container className={styles.container} maxWidth="md"> */}
       <Typography className={styles.title} variant="h4" component="h1">
         Adicionar alunos
       </Typography>
@@ -97,8 +97,7 @@ const CreateStudentsPage: React.FC = () => {
         </FormControl>
       </div>
 
-      <FileInput />
-      {/* </Container> */}
+      <FileInput onChange={setFile} accept=".csv" />
     </PageContainer>
   );
 };

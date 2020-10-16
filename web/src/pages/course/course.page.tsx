@@ -52,7 +52,7 @@ const CoursePage: React.FC = () => {
   async function createCourseClass(data: CourseClass) {
     await api.post('course-classes', {
       entryYear: Number(data.entryYear),
-      entrySemester: Number(data.entrySemester),
+      entrySemester: data.entrySemester,
       courseId: Number(id),
     });
     await revalidateCourseClasses();
@@ -100,13 +100,13 @@ const CoursePage: React.FC = () => {
             },
             editComponent: ({ onChange, value }) => (
               <Select
-                value={value || '0'}
+                value={value ?? ''}
                 onChange={(e) => onChange(e.target.value)}
                 className={styles.select}
               >
-                <MenuItem value="0">Anual</MenuItem>
-                <MenuItem value="1">1º semestre</MenuItem>
-                <MenuItem value="2">2º semestre</MenuItem>
+                <MenuItem value={0}>Anual</MenuItem>
+                <MenuItem value={1}>1º semestre</MenuItem>
+                <MenuItem value={2}>2º semestre</MenuItem>
               </Select>
             ),
           },
