@@ -1,4 +1,4 @@
-import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -6,10 +6,13 @@ import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import React, { useState, ChangeEvent } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import FileInput from '../../components/file-input/file-input.component';
 import PageContainer from '../../components/page-container/page-container.component';
 import useFetch from '../../hooks/use-fetch.hook';
+import useParsedCSV from '../../hooks/use-parsed-csv.hook';
+import api from '../../services/api.service';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -21,6 +24,9 @@ const useStyles = makeStyles((theme) =>
       display: 'grid',
       gridTemplateColumns: '2fr 1fr',
       gridColumnGap: theme.spacing(2),
+      marginBottom: theme.spacing(4),
+    },
+    fileInput: {
       marginBottom: theme.spacing(4),
     },
   }),
@@ -39,12 +45,25 @@ interface Course {
 
 const CreateStudentsPage: React.FC = () => {
   const styles = useStyles();
+  const history = useHistory();
 
   const [selectedCourse, setSelectedCourse] = useState<number | ''>('');
   const [selectedCourseClass, setSelectedCourseClass] = useState<number | ''>(
     '',
   );
+
   const [file, setFile] = useState<File>();
+  const parsedCSV = useParsedCSV(file, [
+    'name',
+    'matriculation',
+    'city',
+    'birthdate',
+    'disability',
+    'race',
+    'entryForm',
+    'gender',
+    'originSchoolType',
+  ]);
 
   const [courses, isCoursesValidating] = useFetch<Course[]>('courses');
   const [courseClasses, isCourseClassesValidating] = useFetch<CourseClass[]>(
@@ -57,6 +76,14 @@ const CreateStudentsPage: React.FC = () => {
 
   function selectCourseClass(event: ChangeEvent<{ value: unknown }>) {
     setSelectedCourseClass(event.target.value as number);
+  }
+
+  async function createStudent() {
+    await api.post('students/many', {
+      courseClassId: selectedCourseClass,
+      students: parsedCSV,
+    });
+    history.push('/alunos');
   }
 
   return (
@@ -97,7 +124,20 @@ const CreateStudentsPage: React.FC = () => {
         </FormControl>
       </div>
 
-      <FileInput onChange={setFile} accept=".csv" />
+      <FileInput
+        className={styles.fileInput}
+        onChange={setFile}
+        accept=".csv"
+      />
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={createStudent}
+        disableElevation
+      >
+        Adicionar alunos
+      </Button>
     </PageContainer>
   );
 };

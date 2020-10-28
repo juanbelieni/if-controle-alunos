@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
   }),
 );
 
-const FileInput: React.FC<Props> = ({ onChange, ...attrs }) => {
+const FileInput: React.FC<Props> = ({ onChange, className, ...attrs }) => {
   const styles = useStyles();
   const [filename, setFilename] = useState<string>();
   const hiddenInput = useRef<HTMLInputElement>(null);
@@ -50,7 +50,7 @@ const FileInput: React.FC<Props> = ({ onChange, ...attrs }) => {
     hiddenInput?.current?.click();
   }
   const changeFile = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] as File | undefined;
+    const file = event.target.files?.[0];
     if (file) {
       setFilename(file?.name);
       onChange(file);
@@ -58,7 +58,7 @@ const FileInput: React.FC<Props> = ({ onChange, ...attrs }) => {
   };
 
   return (
-    <Paper className={styles.container} variant="outlined">
+    <Paper className={`${styles.container} ${className}`} variant="outlined">
       <input
         {...attrs}
         className={styles.hiddenInput}

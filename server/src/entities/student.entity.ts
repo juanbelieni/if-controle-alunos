@@ -17,13 +17,6 @@ export type Race = typeof races[number];
 export const schoolTypes = ['Pública', 'Privada'] as const;
 export type SchoolType = typeof schoolTypes[number];
 
-export const cities = [
-  'São Lourenço',
-  'Carmo de Minas',
-  'Soledade de Minas',
-] as const;
-export type City = typeof cities[number];
-
 @Entity()
 export class Student {
   @PrimaryGeneratedColumn()
@@ -35,8 +28,11 @@ export class Student {
   @Column({ unique: true, length: 12 })
   matriculation: string;
 
-  @Column('date')
+  @Column()
   birthdate: string;
+
+  @Column()
+  disability: string;
 
   @Column({ type: 'enum', enum: genders })
   gender: Gender;
@@ -44,11 +40,14 @@ export class Student {
   @Column({ type: 'enum', enum: races })
   race: Race;
 
-  @Column({ type: 'enum', enum: cities })
-  city: City;
+  @Column()
+  city: string;
 
   @Column({ type: 'enum', enum: schoolTypes })
   originSchoolType: SchoolType;
+
+  @Column()
+  entryForm: string;
 
   @CreateDateColumn()
   createdAt: Date;

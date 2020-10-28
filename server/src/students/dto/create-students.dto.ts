@@ -2,7 +2,6 @@ import { Type } from 'class-transformer';
 import {
   IsString,
   Matches,
-  IsISO8601,
   IsIn,
   IsInt,
   Min,
@@ -15,8 +14,6 @@ import {
   Gender,
   races,
   Race,
-  cities,
-  City,
   schoolTypes,
   SchoolType,
 } from '../../entities/student.entity';
@@ -28,11 +25,15 @@ class StudentDto {
   @Matches(/[0-9]{12}/, { message: 'A matrícula precisa ter 12 digitos.' })
   matriculation: string;
 
-  @IsISO8601(
-    { strict: true },
-    { message: 'Insira uma data de nascimento válida.' },
-  )
+  @Matches(/[0-3]?[0-9]\/[0-1]?[0-9]\/(19|20)[0-9]{2}/, {
+    message: 'Insira uma data de nascimento válida.',
+  })
   birthdate: string;
+
+  @IsString({
+    message: `Insira uma deficiência válida.`,
+  })
+  disability: string;
 
   @IsIn([...genders], {
     message: `O gênero informado não é: ${genders.join(', ')}.`,
@@ -44,10 +45,15 @@ class StudentDto {
   })
   race: Race;
 
-  @IsIn([...cities], {
-    message: `A cidade informada não é: ${cities.join(', ')}.`,
+  @IsString({
+    message: `Insira uma forma de entrada válida.`,
   })
-  city: City;
+  entryForm: string;
+
+  @IsString({
+    message: `Insira uma cidade válida.`,
+  })
+  city: string;
 
   @IsIn([...schoolTypes], {
     message: `O tipo da escola de origem informada não é: ${schoolTypes.join(

@@ -46,21 +46,17 @@ const StudentsPage: React.FC = () => {
         columns={[
           { title: 'Nome', field: 'name' },
           { title: 'Matrícula', field: 'matriculation' },
-          { title: 'Raça/etnia', field: 'race' },
-          { title: 'Sexo', field: 'gender' },
-          {
-            title: 'Data de nascimento',
-            field: 'birthdate',
-            render: ({ birthdate }) => {
-              const [year, month, day] = birthdate.split('-');
-              return `${day}/${month}/${year}`;
-            },
-          },
+          // { title: 'Raça/etnia', field: 'race' },
+          // { title: 'Sexo', field: 'gender' },
+          // {
+          //   title: 'Data de nascimento',
+          //   field: 'birthdate',
+          // },
           { title: 'Cidade', field: 'city' },
-          {
-            title: 'Escola de origem',
-            field: 'originSchoolType',
-          },
+          // {
+          //   title: 'Escola de origem',
+          //   field: 'originSchoolType',
+          // },
           { title: 'Turma', field: 'courseClass.courseClass' },
         ]}
       />

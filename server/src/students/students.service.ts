@@ -1,11 +1,5 @@
 import { CourseClass } from '@entities/course-class.entity';
-import {
-  Student,
-  races,
-  genders,
-  cities,
-  schoolTypes,
-} from '@entities/student.entity';
+import { Student, races, genders, schoolTypes } from '@entities/student.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
@@ -90,10 +84,6 @@ export class StudentsService {
 
   getRaces() {
     return races;
-  }
-
-  getCities() {
-    return cities;
   }
 
   getGenders() {

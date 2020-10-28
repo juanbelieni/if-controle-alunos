@@ -33,11 +33,6 @@ export class StudentsController {
     return this.studentsService.getGenders();
   }
 
-  @Get('cities')
-  getStudentsCities() {
-    return this.studentsService.getCities();
-  }
-
   @Get('school-types')
   getStudentsSchoolTypes() {
     return this.studentsService.getSchoolTypes();
