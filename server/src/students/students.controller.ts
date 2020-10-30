@@ -23,6 +23,11 @@ export class StudentsController {
     return this.studentsService.createMany(createStudentsDto);
   }
 
+  @Get('cities')
+  getStudentsCities() {
+    return this.studentsService.getCities();
+  }
+
   @Get('races')
   getStudentsRaces() {
     return this.studentsService.getRaces();

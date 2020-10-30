@@ -15,9 +15,17 @@ export class CourseClassesService {
     private readonly courseRepository: Repository<Course>,
   ) {}
 
-  async findByCourseId(courseId: number) {
+  async findOneByCourseId(courseId: number) {
     return this.courseClassesRepository.find({
       where: { courseId },
+      relations: ['course'],
+      cache: 2000,
+    });
+  }
+
+  async findAll() {
+    return this.courseClassesRepository.find({
+      relations: ['course'],
       cache: 2000,
     });
   }

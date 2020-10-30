@@ -82,6 +82,17 @@ export class StudentsService {
     );
   }
 
+  async getCities() {
+    return (
+      await this.studentsRepository
+        .createQueryBuilder('student')
+        .select('student.city')
+        .groupBy('student.city')
+        .cache(5000)
+        .getRawMany()
+    ).map((student) => student.student_city as string);
+  }
+
   getRaces() {
     return races;
   }

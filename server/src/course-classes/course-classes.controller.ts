@@ -17,11 +17,11 @@ export class CourseClassesController {
   constructor(private readonly courseClassesService: CourseClassesService) {}
 
   @Get()
-  async index(@Query('courseId') courseId: number) {
+  async index(@Query('courseId') courseId: number | undefined) {
     if (isNaN(courseId)) {
-      throw new BadRequestException('Selecione um curso válido.');
+      return this.courseClassesService.findAll();
     }
-    return this.courseClassesService.findByCourseId(courseId);
+    return this.courseClassesService.findOneByCourseId(courseId);
   }
 
   @Post()
