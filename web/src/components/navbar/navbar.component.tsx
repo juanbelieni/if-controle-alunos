@@ -26,12 +26,16 @@ const Navbar: React.FC = () => {
   const styles = useStyles();
   const history = useHistory();
 
-  function navigateToCourses() {
+  function handleNavigateToCourses() {
     history.push('/cursos');
   }
 
-  function navigateToStudents() {
+  function handleNavigateToStudents() {
     history.push('/alunos');
+  }
+
+  function handleNavigateToExportData() {
+    history.push('/exportar');
   }
 
   return (
@@ -40,11 +44,14 @@ const Navbar: React.FC = () => {
         <Typography variant="h6" className={styles.title}>
           Controle de Alunos
         </Typography>
-        <Button color="inherit" onClick={navigateToCourses}>
+        <Button color="inherit" onClick={handleNavigateToCourses}>
           Cursos
         </Button>
-        <Button color="inherit" onClick={navigateToStudents}>
+        <Button color="inherit" onClick={handleNavigateToStudents}>
           Alunos
+        </Button>
+        <Button color="inherit" onClick={handleNavigateToExportData}>
+          Exportar dados
         </Button>
       </Toolbar>
     </AppBar>
