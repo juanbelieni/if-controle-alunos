@@ -12,10 +12,11 @@ import React, {
 interface Props
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   onChange(file: File | undefined): void;
+  error?: boolean;
 }
 
 const useStyles = makeStyles((theme) =>
-  createStyles({
+  createStyles<string, { error?: boolean }>({
     container: {
       display: 'flex',
       position: 'relative',
@@ -23,6 +24,8 @@ const useStyles = makeStyles((theme) =>
       justifyContent: 'space-between',
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
+      borderColor: (props) =>
+        props.error ? theme.palette.error.main : theme.palette.divider,
     },
     filename: {
       whiteSpace: 'nowrap',
@@ -30,7 +33,7 @@ const useStyles = makeStyles((theme) =>
       textOverflow: 'ellipsis',
     },
     placeholder: {
-      color: '#555',
+      color: (props) => (props.error ? theme.palette.error.main : '#555'),
     },
     hiddenInput: {
       opacity: 0,
@@ -41,8 +44,13 @@ const useStyles = makeStyles((theme) =>
   }),
 );
 
-const FileInput: React.FC<Props> = ({ onChange, className, ...attrs }) => {
-  const styles = useStyles();
+const FileInput: React.FC<Props> = ({
+  onChange,
+  className,
+  error,
+  ...attrs
+}) => {
+  const styles = useStyles({ error });
   const [filename, setFilename] = useState<string>();
   const hiddenInput = useRef<HTMLInputElement>(null);
 

@@ -1,12 +1,14 @@
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import React, { useState } from 'react';
+import React from 'react';
 
 import PageContainer from '../../components/page-container/page-container.component';
 import useFetch from '../../hooks/use-fetch.hook';
+import useForm, { Errors } from '../../hooks/use-form.hook';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme) =>
       marginBottom: theme.spacing(3),
     },
     selects: {
-      width: '100%',
+      marginBottom: theme.spacing(3),
     },
   }),
 );
@@ -32,16 +34,56 @@ interface CourseClass {
   course: Course;
 }
 
+interface Values {
+  courseClasses: number[];
+  races: string[];
+  genders: string[];
+  cities: string[];
+  originSchoolTypes: string[];
+}
+
 export default function ExportDataPage() {
   const styles = useStyles();
 
-  const [selectedCourseClasses, setSelectedCourseClasses] = useState<number[]>(
-    [],
+  function validate(values: Values, errors: Errors<Values>) {
+    if (values.courseClasses.length < 1) {
+      errors.courseClasses = true;
+    }
+    if (values.races.length < 1) {
+      errors.races = true;
+    }
+    if (values.genders.length < 1) {
+      errors.genders = true;
+    }
+    if (values.cities.length < 1) {
+      errors.cities = true;
+    }
+    if (values.originSchoolTypes.length < 1) {
+      errors.originSchoolTypes = true;
+    }
+
+    return errors;
+  }
+
+  function submit(values: Values) {
+    console.log(values);
+  }
+
+  const { handleChange, errors, handleSubmit } = useForm<Values>(
+    {
+      courseClasses: [],
+      races: [],
+      genders: [],
+      cities: [],
+      originSchoolTypes: [],
+    },
+    validate,
+    submit,
   );
-  const [selectedRaces, setSelectedRaces] = useState<string[]>([]);
-  const [selectedGenders, setSelectedGenders] = useState<string[]>([]);
-  const [selectedSchoolTypes, setSelectedSchoolTypes] = useState<string[]>([]);
-  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+
+  function getHandleAutocompleteChange(field: keyof Values) {
+    return (event: any, value: any[]) => handleChange(field, value);
+  }
 
   const [courseClasses] = useFetch<CourseClass[]>('course-classes');
   const [races] = useFetch<string[]>('students/races');
@@ -49,104 +91,112 @@ export default function ExportDataPage() {
   const [schoolTypes] = useFetch<string[]>('students/school-types');
   const [cities] = useFetch<string[]>('students/cities');
 
-  function selectCourseClasses(event: any, value: CourseClass[]) {
-    setSelectedCourseClasses(value.map((course) => course.id));
-  }
-
-  function selectRaces(event: any, value: string[]) {
-    setSelectedRaces(value);
-  }
-
-  function selectGenders(event: any, value: string[]) {
-    setSelectedGenders(value);
-  }
-
-  function selectSchoolTypes(event: any, value: string[]) {
-    setSelectedSchoolTypes(value);
-  }
-
-  function selectCities(event: any, value: string[]) {
-    setSelectedCities(value);
-  }
-
   return (
     <PageContainer maxWidth="md" isLoading={!(courseClasses && races)}>
       <Typography className={styles.title} variant="h4" component="h1">
         Exportar dados
       </Typography>
 
-      <form>
-        <Grid container spacing={3} className={styles.selects}>
-          <Grid item xs={12}>
-            <Autocomplete
-              options={courseClasses || []}
-              multiple
-              disabled={!courseClasses}
-              limitTags={2}
-              getOptionLabel={(courseClass) => courseClass.courseClass}
-              groupBy={(courseClass) => courseClass.course.course}
-              onChange={selectCourseClasses}
-              renderInput={(params) => (
-                <TextField {...params} label="Selecione pelo menos uma turma" />
-              )}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Autocomplete
-              options={races || []}
-              multiple
-              disabled={!races}
-              limitTags={3}
-              onChange={selectRaces}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Selecione pelo menos uma raça/etnia"
-                />
-              )}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Autocomplete
-              options={genders || []}
-              multiple
-              disabled={!genders}
-              onChange={selectGenders}
-              renderInput={(params) => (
-                <TextField {...params} label="Selecione pelo menos um sexo" />
-              )}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Autocomplete
-              options={schoolTypes || []}
-              multiple
-              disabled={!schoolTypes}
-              onChange={selectSchoolTypes}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Selecione pelo menos um tipo de escola de origem"
-                />
-              )}
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <Autocomplete
-              options={cities || []}
-              multiple
-              disabled={!cities}
-              onChange={selectCities}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Selecione pelo menos uma cidade"
-                />
-              )}
-            />
-          </Grid>
+      <Grid container spacing={3} className={styles.selects}>
+        <Grid item xs={12}>
+          <Autocomplete
+            options={courseClasses || []}
+            multiple
+            disabled={!courseClasses}
+            limitTags={2}
+            getOptionLabel={(courseClass) => courseClass.courseClass}
+            groupBy={(courseClass) => courseClass.course.course}
+            onChange={(_, value) =>
+              handleChange(
+                'courseClasses',
+                value.map((courseClass) => courseClass.id),
+              )
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={errors.courseClasses}
+                helperText="Você deve selecionar pelo menos uma turma."
+                label="Turmas"
+              />
+            )}
+          />
         </Grid>
-      </form>
+        <Grid item xs={6}>
+          <Autocomplete
+            options={races || []}
+            multiple
+            disabled={!races}
+            limitTags={3}
+            onChange={getHandleAutocompleteChange('races')}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={errors.races}
+                helperText="Você deve selecionar pelo menos uma raça/etnia."
+                label="Raças/etnias"
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Autocomplete
+            options={genders || []}
+            multiple
+            disabled={!genders}
+            onChange={getHandleAutocompleteChange('genders')}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={errors.genders}
+                helperText="Você deve selecionar pelo menos um sexo."
+                label="Sexos"
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Autocomplete
+            options={schoolTypes || []}
+            multiple
+            disabled={!schoolTypes}
+            onChange={getHandleAutocompleteChange('originSchoolTypes')}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={errors.originSchoolTypes}
+                helperText="Você deve selecionar pelo menos um tipo de escola de origem."
+                label="Tipos de escola de origem"
+              />
+            )}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Autocomplete
+            options={cities || []}
+            multiple
+            disabled={!cities}
+            onChange={getHandleAutocompleteChange('cities')}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                error={errors.cities}
+                helperText="Você deve selecionar pelo menos uma cidade."
+                label="Cidades"
+              />
+            )}
+          />
+        </Grid>
+      </Grid>
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleSubmit}
+        disableElevation
+      >
+        Exportar
+      </Button>
     </PageContainer>
   );
 }
