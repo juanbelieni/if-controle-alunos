@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core/styles';
 import React from 'react';
 
+import { AlertProvider } from './contexts/alert.context';
 import Routes from './routes';
 
 const theme = responsiveFontSizes(createMuiTheme({}));
@@ -14,7 +15,9 @@ const theme = responsiveFontSizes(createMuiTheme({}));
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Routes />
+      <AlertProvider>
+        <Routes />
+      </AlertProvider>
       <CssBaseline />
     </ThemeProvider>
   );

@@ -7,11 +7,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { AxiosError } from 'axios';
 import React, { ChangeEvent } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import FileInput from '../../components/file-input/file-input.component';
 import PageContainer from '../../components/page-container/page-container.component';
+import useAlert from '../../hooks/use-alert.hook';
 import useFetch from '../../hooks/use-fetch.hook';
 import useForm, { Errors } from '../../hooks/use-form.hook';
 import api from '../../services/api.service';
@@ -52,6 +54,7 @@ interface Values {
 const CreateStudentsPage: React.FC = () => {
   const styles = useStyles();
   const history = useHistory();
+  const showAlert = useAlert();
 
   function validate(values: Values, errors: Errors<Values>) {
     if (values.course === '') {
@@ -80,12 +83,17 @@ const CreateStudentsPage: React.FC = () => {
       'originSchoolType',
     ]);
 
-    await api.post('students/many', {
-      courseClassId: values.courseClass,
-      students: parsedCSV,
-    });
+    try {
+      await api.post('students/many', {
+        courseClassId: values.courseClass,
+        students: parsedCSV,
+      });
 
-    history.push('/alunos');
+      history.push('/alunos');
+    } catch (error) {
+      const message = (error as AxiosError).response?.data.message;
+      showAlert(typeof message === 'string' ? message : 'Erro desconhecido.');
+    }
   }
 
   const { values, errors, handleChange, handleSubmit } = useForm<Values>(
