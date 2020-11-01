@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
+import CourseClassPage from './pages/course-class/course-class.page';
 import CoursePage from './pages/course/course.page';
 import CoursesPage from './pages/courses/courses.page';
 import CreateStudentsPage from './pages/create-students/create-students.page';
@@ -16,6 +17,9 @@ const Routes: React.FC = () => {
         </Route>
         <Route path="/cursos/:id" exact>
           <CoursePage />
+        </Route>
+        <Route path="/turmas/:id" exact>
+          <CourseClassPage />
         </Route>
         <Route path="/alunos" exact>
           <StudentsPage />

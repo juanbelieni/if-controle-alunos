@@ -29,6 +29,13 @@ export class StudentsService {
     });
   }
 
+  async findManyByCourseClassId(courseClassId: number) {
+    return this.studentsRepository.find({
+      where: { courseClassId },
+      cache: 2000,
+    });
+  }
+
   async createOne(createStudentDto: CreateStudentDto) {
     const { courseClassId, ...studentData } = createStudentDto;
 

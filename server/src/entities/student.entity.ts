@@ -52,6 +52,9 @@ export class Student {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Column({ nullable: false })
+  courseClassId: number;
+
   @ManyToOne(() => CourseClass, { nullable: false })
   courseClass: CourseClass;
 }

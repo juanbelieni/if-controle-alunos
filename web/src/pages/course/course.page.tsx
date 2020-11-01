@@ -41,11 +41,11 @@ const CoursePage: React.FC = () => {
   const styles = useStyles();
   const { id } = useParams();
 
-  const [course, isCourseRevalidating] = useFetch<Course>(`courses/${id}`);
+  const [course] = useFetch<Course>(`courses/${id}`);
 
   const [
     courseClasses,
-    isCourseClassesRevalidating,
+    isCourseClassesValidating,
     revalidateCourseClasses,
   ] = useFetch<CourseClass[]>(`course-classes?courseId=${id}`);
 
@@ -64,7 +64,7 @@ const CoursePage: React.FC = () => {
   }
 
   return (
-    <PageContainer isLoading={isCourseRevalidating}>
+    <PageContainer isLoading={!course}>
       <Typography variant="h4" component="h1">
         {course?.course}
       </Typography>
@@ -79,7 +79,7 @@ const CoursePage: React.FC = () => {
       <Table<CourseClass>
         title="Turmas"
         data={courseClasses || []}
-        isLoading={isCourseClassesRevalidating}
+        isLoading={isCourseClassesValidating}
         onRefrechClick={revalidateCourseClasses}
         editable={{
           onRowAdd: createCourseClass,

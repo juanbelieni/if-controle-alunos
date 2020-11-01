@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 
 import { CreateStudentDto } from './dto/create-student.dto';
 import { CreateStudentsDto } from './dto/create-students.dto';
@@ -9,8 +9,11 @@ export class StudentsController {
   constructor(private readonly studentsService: StudentsService) {}
 
   @Get()
-  index() {
-    return this.studentsService.findAll();
+  getStudents(@Query('courseClassId') courseClassId: number | undefined) {
+    if (isNaN(courseClassId)) {
+      return this.studentsService.findAll();
+    }
+    return this.studentsService.findManyByCourseClassId(courseClassId);
   }
 
   @Post()

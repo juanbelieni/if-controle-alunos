@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Query,
-  BadRequestException,
   Delete,
   Param,
 } from '@nestjs/common';
@@ -17,11 +16,16 @@ export class CourseClassesController {
   constructor(private readonly courseClassesService: CourseClassesService) {}
 
   @Get()
-  async index(@Query('courseId') courseId: number | undefined) {
+  async getCourseClasses(@Query('courseId') courseId: number | undefined) {
     if (isNaN(courseId)) {
       return this.courseClassesService.findAll();
     }
-    return this.courseClassesService.findOneByCourseId(courseId);
+    return this.courseClassesService.findManyByCourseId(courseId);
+  }
+
+  @Get(':id')
+  async getCourseClass(@Param('id') id: number) {
+    return this.courseClassesService.findOne(id);
   }
 
   @Post()
