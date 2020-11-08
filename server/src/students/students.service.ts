@@ -6,6 +6,7 @@ import { Repository, In } from 'typeorm';
 
 import { CreateStudentDto } from './dto/create-student.dto';
 import { CreateStudentsDto } from './dto/create-students.dto';
+import { FiltersDto } from './dto/filters.dto';
 
 @Injectable()
 export class StudentsService {
@@ -32,6 +33,30 @@ export class StudentsService {
   async findManyByCourseClassId(courseClassId: number) {
     return this.studentsRepository.find({
       where: { courseClassId },
+      cache: 2000,
+    });
+  }
+
+  async findManyByFilters(filtersDto: FiltersDto) {
+    return this.studentsRepository.find({
+      where: {
+        race: In(filtersDto.races),
+        gender: In(filtersDto.genders),
+        city: In(filtersDto.cities),
+        originSchoolType: In(filtersDto.originSchoolTypes),
+        courseClassId: In(filtersDto.courseClasses),
+      },
+      join: {
+        alias: 'student',
+        leftJoinAndSelect: {
+          courseClass: 'student.courseClass',
+          course: 'courseClass.course',
+        },
+      },
+      order: {
+        courseClassId: 'ASC',
+        name: 'ASC',
+      },
       cache: 2000,
     });
   }

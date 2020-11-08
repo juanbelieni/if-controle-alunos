@@ -2,6 +2,7 @@ import { Controller, Post, Body, Get, Query } from '@nestjs/common';
 
 import { CreateStudentDto } from './dto/create-student.dto';
 import { CreateStudentsDto } from './dto/create-students.dto';
+import { FiltersDto } from './dto/filters.dto';
 import { StudentsService } from './students.service';
 
 @Controller('students')
@@ -14,6 +15,11 @@ export class StudentsController {
       return this.studentsService.findAll();
     }
     return this.studentsService.findManyByCourseClassId(courseClassId);
+  }
+
+  @Get('filter')
+  getStudentsByFilters(@Query() filtersDto: FiltersDto) {
+    return this.studentsService.findManyByFilters(filtersDto);
   }
 
   @Post()

@@ -4,11 +4,14 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { saveAs } from 'file-saver';
 import React from 'react';
 
 import PageContainer from '../../components/page-container/page-container.component';
 import useFetch from '../../hooks/use-fetch.hook';
 import useForm, { Errors } from '../../hooks/use-form.hook';
+import api from '../../services/api.service';
+import createCSV from '../../utils/create-csv.util';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -65,8 +68,34 @@ export default function ExportDataPage() {
     return errors;
   }
 
-  function submit(values: Values) {
-    console.log(values);
+  async function submit(values: Values) {
+    const response = await api.get('/students/filter', {
+      params: values,
+    });
+
+    const csv = createCSV(
+      response.data.map((row: Record<string, any>) => ({
+        ...row,
+        courseClass: row.courseClass.courseClass,
+      })),
+      [
+        'name',
+        'matriculation',
+        'birthdate',
+        'disability',
+        'gender',
+        'race',
+        'city',
+        'originSchoolType',
+        'entryForm',
+        'courseClass',
+      ],
+    );
+
+    saveAs(
+      new Blob([csv], { type: 'text/plain;charset=utf-8' }),
+      `alunos-${Date.now()}.csv`,
+    );
   }
 
   const { handleChange, errors, handleSubmit } = useForm<Values>(
